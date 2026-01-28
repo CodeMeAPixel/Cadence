@@ -2,7 +2,7 @@ package version
 
 const (
 	// Version is the current version of Cadence
-	Version = "0.1.0"
+	Version = "0.1.1"
 	// BuildTime is the build timestamp (set at compile time with -ldflags)
 	BuildTime = "unknown"
 	// GitCommit is the git commit hash (set at compile time with -ldflags)
