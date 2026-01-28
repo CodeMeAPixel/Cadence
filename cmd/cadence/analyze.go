@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	gogit "github.com/go-git/go-git/v5"
 	"github.com/spf13/cobra"
 
+	"github.com/codemeapixel/cadence/internal/ai"
 	"github.com/codemeapixel/cadence/internal/analyzer"
 	"github.com/codemeapixel/cadence/internal/config"
 	"github.com/codemeapixel/cadence/internal/detector"
@@ -153,6 +157,14 @@ func runAnalyze(cmd *cobra.Command, args []string) error {
 
 	suspicious := det.DetectSuspicious(result.CommitPairs, stats)
 
+	// Perform AI analysis on suspicious commits if enabled
+	if cfg.AI.Enabled && len(suspicious) > 0 {
+		fmt.Fprintf(os.Stderr, "Performing AI analysis on %d suspicious commits...\n", len(suspicious))
+		if err := performAIAnalysis(suspicious, &cfg.AI); err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: AI analysis failed: %v\n", err)
+		}
+	}
+
 	rep, err := reporter.NewReporter(outputFormat)
 	if err != nil {
 		return fmt.Errorf("failed to create reporter: %w", err)
@@ -169,10 +181,18 @@ func runAnalyze(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed to generate report: %w", err)
 	}
 
-	if err := os.WriteFile(analyzeOutput, []byte(reportStr), 0o600); err != nil {
+	// Create reports directory if it doesn't exist
+	reportsDir := "reports"
+	if err := os.MkdirAll(reportsDir, 0o755); err != nil {
+		return fmt.Errorf("failed to create reports directory: %w", err)
+	}
+
+	// Join the output path with reports directory
+	outputPath := filepath.Join(reportsDir, analyzeOutput)
+	if err := os.WriteFile(outputPath, []byte(reportStr), 0o600); err != nil {
 		return fmt.Errorf("failed to write output file: %w", err)
 	}
-	fmt.Fprintf(os.Stderr, "Report written to %s\n", analyzeOutput)
+	fmt.Fprintf(os.Stderr, "Report written to %s\n", outputPath)
 
 	return nil
 }
@@ -233,4 +253,81 @@ func cloneRemoteRepo(repoURL string) (string, func() error, error) {
 	}
 
 	return tempDir, cleanup, nil
+}
+
+// performAIAnalysis runs AI analysis on suspicious commits
+func performAIAnalysis(suspicious []*detector.SuspiciousCommit, aiConfig *config.AIConfig) error {
+	aiAnalyzer, err := ai.NewAnalyzer(&ai.Config{
+		Enabled:   aiConfig.Enabled,
+		Provider:  aiConfig.Provider,
+		APIKey:    aiConfig.APIKey,
+		Model:     aiConfig.Model,
+		MaxTokens: 500, // Keep it efficient
+	})
+	if err != nil {
+		return fmt.Errorf("failed to create AI analyzer: %w", err)
+	}
+
+	if !aiAnalyzer.IsConfigured() {
+		return fmt.Errorf("AI analyzer not properly configured")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
+	defer cancel()
+
+	// Analyze each suspicious commit
+	for i, commit := range suspicious {
+		// Get the actual code additions for this commit
+		additions := getCommitAdditions(commit.Pair)
+		if additions == "" {
+			continue // Skip if no additions to analyze
+		}
+
+		fmt.Fprintf(os.Stderr, "  Analyzing commit %d/%d: %s...\n", i+1, len(suspicious), commit.Pair.Current.Hash[:8])
+
+		analysis, err := aiAnalyzer.AnalyzeSuspiciousCode(ctx, commit.Pair.Current.Hash, additions)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "    Warning: AI analysis failed for %s: %v\n", commit.Pair.Current.Hash[:8], err)
+			continue
+		}
+
+		commit.AIAnalysis = analysis
+	}
+
+	return nil
+}
+
+// getCommitAdditions extracts the code additions from a commit pair
+func getCommitAdditions(pair *git.CommitPair) string {
+	if pair == nil || pair.Current == nil {
+		return ""
+	}
+
+	// Use actual diff content if available
+	if pair.DiffContent != "" {
+		// Extract only the added lines for AI analysis
+		lines := strings.Split(pair.DiffContent, "\n")
+		addedLines := make([]string, 0)
+
+		for _, line := range lines {
+			if strings.HasPrefix(line, "+") && !strings.HasPrefix(line, "+++") {
+				addedLines = append(addedLines, strings.TrimPrefix(line, "+"))
+			}
+		}
+
+		if len(addedLines) > 0 {
+			return strings.Join(addedLines, "\n")
+		}
+	}
+
+	// Fallback to summary if no diff content available
+	if pair.Stats.Additions > 0 {
+		return fmt.Sprintf("// Commit %s added %d lines and deleted %d lines across %d files",
+			pair.Current.Hash[:8],
+			pair.Stats.Additions,
+			pair.Stats.Deletions,
+			pair.Stats.FilesChanged)
+	}
+
+	return ""
 }

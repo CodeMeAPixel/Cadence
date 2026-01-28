@@ -83,6 +83,9 @@ func (r *TextReporter) Generate(data *ReportData) (string, error) {
 			for _, reason := range s.Reasons {
 				sb.WriteString(fmt.Sprintf("      - %s\n", reason))
 			}
+			if s.AIAnalysis != "" {
+				sb.WriteString(fmt.Sprintf("    AI Analysis:     %s\n", s.AIAnalysis))
+			}
 			sb.WriteString("\n")
 		}
 	}

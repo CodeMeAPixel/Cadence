@@ -20,6 +20,15 @@ type DispersionStrategy = patterns.DispersionStrategy
 type RatioStrategy = patterns.RatioStrategy
 type PrecisionStrategy = patterns.PrecisionStrategy
 
+// AI Slop detection strategies
+type CommitMessageStrategy = patterns.CommitMessageStrategy
+type NamingPatternStrategy = patterns.NamingPatternStrategy
+type StructuralConsistencyStrategy = patterns.StructuralConsistencyStrategy
+type BurstPatternStrategy = patterns.BurstPatternStrategy
+type ErrorHandlingPatternStrategy = patterns.ErrorHandlingPatternStrategy
+type TemplatePatternStrategy = patterns.TemplatePatternStrategy
+type FileExtensionPatternStrategy = patterns.FileExtensionPatternStrategy
+
 // Constructor functions for backward compatibility
 func NewVelocityStrategy(additionsPerMin, deletionsPerMin float64) *VelocityStrategy {
 	return patterns.NewVelocityStrategy(additionsPerMin, deletionsPerMin)
@@ -47,4 +56,33 @@ func NewRatioStrategy(maxAdd, minDel float64, minSize int64) *RatioStrategy {
 
 func NewPrecisionStrategy(consistency float64) *PrecisionStrategy {
 	return patterns.NewPrecisionStrategy(consistency)
+}
+
+// AI Slop detection strategy constructors
+func NewCommitMessageStrategy() *CommitMessageStrategy {
+	return patterns.NewCommitMessageStrategy()
+}
+
+func NewNamingPatternStrategy() *NamingPatternStrategy {
+	return patterns.NewNamingPatternStrategy()
+}
+
+func NewStructuralConsistencyStrategy() *StructuralConsistencyStrategy {
+	return patterns.NewStructuralConsistencyStrategy()
+}
+
+func NewBurstPatternStrategy(maxPerHour int) *BurstPatternStrategy {
+	return patterns.NewBurstPatternStrategy(maxPerHour)
+}
+
+func NewErrorHandlingPatternStrategy() *ErrorHandlingPatternStrategy {
+	return patterns.NewErrorHandlingPatternStrategy()
+}
+
+func NewTemplatePatternStrategy() *TemplatePatternStrategy {
+	return patterns.NewTemplatePatternStrategy()
+}
+
+func NewFileExtensionPatternStrategy() *FileExtensionPatternStrategy {
+	return patterns.NewFileExtensionPatternStrategy()
 }

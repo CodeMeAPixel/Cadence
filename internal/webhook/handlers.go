@@ -56,14 +56,8 @@ func (ap *AnalysisProcessor) Process(ctx context.Context, job *WebhookJob) error
 		AnalyzedAt:        time.Now(),
 	}
 
-	// TODO: Implement actual analysis against the repository
-	// This would require:
-	// - Cloning the repo temporarily
-	// - Running git.OpenRepository()
-	// - Creating an analyzer instance
-	// - Running detection
-	// - Storing/reporting results
-
+	// Webhook analysis is currently a placeholder
+	// Full implementation requires repository cloning and analysis orchestration
 	return nil
 }
 
@@ -194,9 +188,9 @@ func (wh *WebhookHandlers) ListJobs(c *fiber.Ctx) error {
 	limit := c.QueryInt("limit", 50)
 	jobs := wh.queue.ListJobs(limit)
 
-	jobsData := make([]fiber.Map, 0)
+	jobList := make([]fiber.Map, 0)
 	for _, job := range jobs {
-		jobsData = append(jobsData, fiber.Map{
+		jobList = append(jobList, fiber.Map{
 			"id":        job.ID,
 			"status":    job.Status,
 			"repo":      job.RepoName,
@@ -207,8 +201,8 @@ func (wh *WebhookHandlers) ListJobs(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"total": len(jobsData),
-		"jobs":  jobsData,
+		"total": len(jobList),
+		"jobs":  jobList,
 	})
 }
 

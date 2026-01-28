@@ -61,6 +61,7 @@ type JSONSuspiciousCommit struct {
 	DeletionVelocityMin float64  `json:"deletion_velocity_per_min"`
 	ConfidenceScore     float64  `json:"confidence_score"`
 	Reasons             []string `json:"reasons"`
+	AIAnalysis          string   `json:"ai_analysis,omitempty"`
 }
 
 func (r *JSONReporter) Generate(data *ReportData) (string, error) {
@@ -114,6 +115,7 @@ func (r *JSONReporter) Generate(data *ReportData) (string, error) {
 			TimeDelta:         s.Pair.TimeDelta.Seconds(),
 			ConfidenceScore:   s.Score,
 			Reasons:           s.Reasons,
+			AIAnalysis:        s.AIAnalysis,
 		}
 		if s.AdditionVelocity != nil {
 			commit.AdditionVelocityMin = s.AdditionVelocity.LOCPerMinute

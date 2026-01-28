@@ -28,6 +28,11 @@ type CommitPairProvider interface {
 	GetCommitPairs(commits []*Commit) ([]*CommitPair, error)
 }
 
+// DiffProvider is implemented by repositories that can provide diff content
+type DiffProvider interface {
+	GetCommitDiff(fromHash, toHash string) (string, error)
+}
+
 type gitRepository struct {
 	repo         *git.Repository
 	path         string
@@ -147,11 +152,19 @@ func (r *gitRepository) GetCommitPairs(commits []*Commit) ([]*CommitPair, error)
 			continue
 		}
 
+		// Get the actual diff content for AI analysis
+		diffContent, err := r.GetCommitDiff(previous.Hash, current.Hash)
+		if err != nil {
+			// If we can't get diff content, continue without it
+			diffContent = ""
+		}
+
 		pairs = append(pairs, &CommitPair{
-			Previous:  previous,
-			Current:   current,
-			TimeDelta: timeDelta,
-			Stats:     stats,
+			Previous:    previous,
+			Current:     current,
+			TimeDelta:   timeDelta,
+			Stats:       stats,
+			DiffContent: diffContent,
 		})
 	}
 
@@ -274,4 +287,62 @@ func (r *gitRepository) getDiffStats(fromHash, toHash string) (*DiffStats, error
 
 func (r *gitRepository) Close() error {
 	return nil
+}
+
+// GetCommitDiff returns the actual diff content between two commits
+func (r *gitRepository) GetCommitDiff(fromHash, toHash string) (string, error) {
+	fromCommit, err := r.repo.CommitObject(plumbing.NewHash(fromHash))
+	if err != nil {
+		return "", fmt.Errorf("failed to get from commit: %w", err)
+	}
+
+	toCommit, err := r.repo.CommitObject(plumbing.NewHash(toHash))
+	if err != nil {
+		return "", fmt.Errorf("failed to get to commit: %w", err)
+	}
+
+	fromTree, err := fromCommit.Tree()
+	if err != nil {
+		return "", fmt.Errorf("failed to get from tree: %w", err)
+	}
+
+	toTree, err := toCommit.Tree()
+	if err != nil {
+		return "", fmt.Errorf("failed to get to tree: %w", err)
+	}
+
+	changes, err := fromTree.Diff(toTree)
+	if err != nil {
+		return "", fmt.Errorf("failed to get diff: %w", err)
+	}
+
+	var diffContent strings.Builder
+	for _, change := range changes {
+		patch, err := change.Patch()
+		if err != nil {
+			continue
+		}
+
+		filePatches := patch.FilePatches()
+		if len(filePatches) == 0 {
+			continue
+		}
+
+		// Check first file patch to determine if we should exclude
+		from, to := filePatches[0].Files()
+		var filePath string
+		if to != nil {
+			filePath = to.Path()
+		} else if from != nil {
+			filePath = from.Path()
+		}
+
+		if r.shouldExcludeFile(filePath) {
+			continue
+		}
+
+		diffContent.WriteString(patch.String())
+	}
+
+	return diffContent.String(), nil
 }

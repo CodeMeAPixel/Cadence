@@ -12,10 +12,11 @@ type Commit struct {
 }
 
 type CommitPair struct {
-	Previous  *Commit
-	Current   *Commit
-	TimeDelta time.Duration
-	Stats     *DiffStats
+	Previous    *Commit
+	Current     *Commit
+	TimeDelta   time.Duration
+	Stats       *DiffStats
+	DiffContent string // Actual diff content for analysis
 }
 
 type DiffStats struct {

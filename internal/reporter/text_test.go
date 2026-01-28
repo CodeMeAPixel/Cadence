@@ -13,7 +13,7 @@ func TestTextReporter_Generate(t *testing.T) {
 	now := time.Now()
 
 	t.Run("generates report with no suspicious commits", func(t *testing.T) {
-		data := &ReportData{
+		reportData := &ReportData{
 			Suspicious: []*detector.SuspiciousCommit{},
 			Stats: &metrics.RepositoryStats{
 				TotalCommits:     10,

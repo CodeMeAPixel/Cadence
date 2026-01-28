@@ -5,6 +5,72 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-01-28
+
+### Added
+
+#### AI-Powered Analysis
+- **OpenAI Integration**: Optional AI analysis of flagged suspicious commits using GPT-4 Mini
+- **Multi-step Reasoning**: Improved prompting with system and user prompts for better analysis
+- **Structured Output**: AI analysis returns confidence scores and detailed reasoning
+- **Token Efficient**: Only analyzes already-flagged commits (not all commits)
+- **Cost Effective**: ~$0.00003 per commit analyzed using GPT-4 Mini
+
+#### Remote Repository Support
+- **GitHub URL Support**: Analyze repositories by passing GitHub URLs directly
+- **URL Parsing**: Automatically parse GitHub blob/tree URLs and extract branch information
+- **Auto-cloning**: Seamless cloning of remote repositories with automatic cleanup
+- **Branch Fallback**: Graceful fallback to default branch if specified branch doesn't exist
+- **Temporary Management**: Proper cleanup of temporary cloned directories
+
+#### Configuration Improvements
+- **Auto-detection**: Automatically loads `cadence.yml` from current directory if present
+- **AI Config**: New AI section in configuration for enabling/disabling AI analysis
+- **Environment Variables**: Support for `CADENCE_AI_KEY` environment variable
+- **Sample Config**: Updated sample config includes AI configuration options
+
+#### Skills.sh Integration
+- **Skills Manifest**: Added `skills.json` defining Cadence as an agent skill
+- **Skill Definitions**: Two main skills: `analyze-repository` and `detect-suspicious-commit`
+- **Agent Compatible**: Compatible with Claude Code, GitHub Copilot, and other agent platforms
+- **Standardized Output**: Skill output conforms to skills.sh specifications
+- **Documentation**: Added `SKILLS.md` with integration examples and usage guide
+
+#### Detection Enhancements
+- **AI Detection Indicators**: System trained to identify:
+  - Template-like code patterns
+  - "Too perfect" code structure
+  - Missing error handling
+  - Pattern repetition
+  - Lack of domain-specific optimizations
+
+### Changed
+
+- **Prompting Logic**: Enhanced with multi-step reasoning for better accuracy
+- **Report Output**: Added optional AI analysis to both text and JSON reports
+- **Error Handling**: Improved branch not found errors with helpful fallback
+
+### Technical Details
+
+- **New Dependencies**:
+  - github.com/sashabaranov/go-openai - OpenAI API client
+- **New Packages**:
+  - `internal/ai` - AI analysis engine with OpenAI support
+- **Updated Packages**:
+  - `cmd/cadence/analyze.go` - Remote repository support
+  - `internal/git/repository.go` - Branch fallback logic
+  - `internal/config/config.go` - AI configuration
+  - `internal/detector/detector.go` - AI analysis field
+  - `internal/reporter/` - AI analysis output
+
+### Known Limitations
+
+- AI analysis requires OpenAI API key (feature is optional)
+- Branch extraction only works with standard GitHub URLs
+- Cloned repositories stored in OS temp directory
+
+---
+
 ## [0.1.0] - 2026-01-28
 
 ### Added
@@ -130,4 +196,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[0.1.1]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.1.1
 [0.1.0]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.1.0

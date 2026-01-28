@@ -15,6 +15,8 @@ type SuspiciousCommit struct {
 	Reasons          []string
 	// Score is a confidence metric (0.0-1.0) for how suspicious the commit is
 	Score float64
+	// AIAnalysis is optional AI-powered analysis of the suspicious code
+	AIAnalysis string
 }
 
 type Detector struct {
@@ -53,6 +55,15 @@ func New(thresholds *Thresholds) (*Detector, error) {
 	if thresholds.EnablePrecisionAnalysis {
 		strategies = append(strategies, NewPrecisionStrategy(0.85))
 	}
+
+	// Add new AI slop detection strategies
+	strategies = append(strategies, NewCommitMessageStrategy())
+	strategies = append(strategies, NewNamingPatternStrategy())
+	strategies = append(strategies, NewStructuralConsistencyStrategy())
+	strategies = append(strategies, NewBurstPatternStrategy(10)) // Max 10 commits per hour
+	strategies = append(strategies, NewErrorHandlingPatternStrategy())
+	strategies = append(strategies, NewTemplatePatternStrategy())
+	strategies = append(strategies, NewFileExtensionPatternStrategy())
 
 	return &Detector{
 		thresholds: thresholds,

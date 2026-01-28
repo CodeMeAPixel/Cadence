@@ -1,0 +1,124 @@
+{
+  "name": "cadence-ai-detection",
+  "version": "0.1.0",
+  "description": "AI-generated code detection skill for analyzing Git repositories",
+  "author": "CodeMeAPixel",
+  "repository": "https://github.com/CodeMeAPixel/Cadence",
+  "license": "AGPL-3.0",
+  "skills": [
+    {
+      "name": "analyze-repository",
+      "description": "Analyze a Git repository for suspicious AI-generated commits",
+      "input": {
+        "type": "object",
+        "properties": {
+          "repository": {
+            "type": "string",
+            "description": "Local path or GitHub URL of the repository"
+          },
+          "branch": {
+            "type": "string",
+            "description": "Optional branch to analyze",
+            "default": "main"
+          },
+          "output_format": {
+            "type": "string",
+            "enum": ["json", "text"],
+            "default": "json"
+          }
+        },
+        "required": ["repository"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "suspicious_commits": {
+            "type": "array",
+            "description": "List of flagged suspicious commits"
+          },
+          "statistics": {
+            "type": "object",
+            "description": "Repository analysis statistics"
+          },
+          "total_suspicious": {
+            "type": "integer",
+            "description": "Count of suspicious commits found"
+          }
+        }
+      },
+      "examples": [
+        {
+          "input": {
+            "repository": "https://github.com/CodeMeAPixel/Cadence"
+          },
+          "output": {
+            "suspicious_commits": [],
+            "total_suspicious": 0
+          }
+        }
+      ]
+    },
+    {
+      "name": "detect-suspicious-commit",
+      "description": "Analyze a single commit for AI-generated code patterns",
+      "input": {
+        "type": "object",
+        "properties": {
+          "commit_hash": {
+            "type": "string",
+            "description": "Git commit hash"
+          },
+          "additions": {
+            "type": "string",
+            "description": "Code additions in the commit"
+          },
+          "use_ai": {
+            "type": "boolean",
+            "description": "Enable AI-powered analysis",
+            "default": false
+          }
+        },
+        "required": ["commit_hash", "additions"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "suspicious": {
+            "type": "boolean"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ai_analysis": {
+            "type": "string",
+            "description": "Optional AI assessment"
+          }
+        }
+      }
+    }
+  ],
+  "configuration": {
+    "thresholds": {
+      "suspicious_additions": 500,
+      "suspicious_deletions": 1000,
+      "max_additions_per_min": 100,
+      "max_deletions_per_min": 500,
+      "min_time_delta_seconds": 60
+    },
+    "ai": {
+      "enabled": false,
+      "provider": "openai",
+      "model": "gpt-4-mini"
+    }
+  },
+  "tags": ["ai-detection", "git-analysis", "code-quality", "security", "ai-generation"],
+  "keywords": ["AI-generated code", "commit analysis", "statistical anomaly", "code detection"]
+}

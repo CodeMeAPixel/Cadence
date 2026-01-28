@@ -15,8 +15,12 @@ func TestLoad(t *testing.T) {
 		if config == nil {
 			t.Fatal("Load(\"\") returned nil config")
 		}
-		if !config.Thresholds.IsZero() {
-			t.Error("Empty config should have zero thresholds")
+		// Empty config should now have default thresholds
+		if config.Thresholds.SuspiciousAdditions != 500 {
+			t.Errorf("Empty config should have default SuspiciousAdditions=500, got %d", config.Thresholds.SuspiciousAdditions)
+		}
+		if config.Thresholds.SuspiciousDeletions != 1000 {
+			t.Errorf("Empty config should have default SuspiciousDeletions=1000, got %d", config.Thresholds.SuspiciousDeletions)
 		}
 	})
 
@@ -162,8 +166,9 @@ exclude_files:
 		if config.Thresholds.SuspiciousAdditions != 200 {
 			t.Errorf("SuspiciousAdditions = %d, want 200", config.Thresholds.SuspiciousAdditions)
 		}
-		if config.Thresholds.SuspiciousDeletions != 0 {
-			t.Errorf("Unset SuspiciousDeletions should be 0, got %d", config.Thresholds.SuspiciousDeletions)
+		// Unset values should now use default thresholds
+		if config.Thresholds.SuspiciousDeletions != 1000 {
+			t.Errorf("Unset SuspiciousDeletions should use default 1000, got %d", config.Thresholds.SuspiciousDeletions)
 		}
 	})
 }

@@ -116,6 +116,56 @@ Cadence flags commits that are suspicious based on:
 
 **Confidence Score**: Increases with each triggered strategy. Multiple signals = higher confidence.
 
+## AI-Powered Analysis (Optional)
+
+Cadence can leverage OpenAI's GPT models to analyze flagged commits for additional AI-generation indicators. This is **optional** and requires an OpenAI API key.
+
+### Why Use AI Analysis?
+
+- **Second opinion**: AI provides independent assessment of suspicious commits
+- **Token efficient**: Only analyzes already-flagged commits (not all commits)
+- **Lightweight**: Uses GPT-4 Mini for cost efficiency
+- **Complementary**: Works alongside statistical detection, not instead of it
+
+### Setup
+
+1. Get an OpenAI API key from https://platform.openai.com/api-keys
+2. Enable in config or environment:
+
+```bash
+# Via config file (cadence.yaml)
+ai:
+  enabled: true
+  provider: "openai"
+  api_key: "sk-..."  # or use env var below
+  model: "gpt-4-mini"
+
+# OR via environment variable
+export CADENCE_AI_KEY="sk-..."
+```
+
+3. Run analysis as normal - AI kicks in automatically for suspicious commits
+
+### Output
+
+AI analysis appears in both text and JSON reports:
+
+**Text Report:**
+```
+    AI Analysis:     likely AI-generated
+```
+
+**JSON Report:**
+```json
+"ai_analysis": "likely AI-generated"
+```
+
+### Cost Estimation
+
+- Average suspicious commit: ~200 tokens
+- GPT-4 Mini: ~$0.00015 per 1K tokens  
+- Cost per analysis: ~$0.00003 (3 cents per 1000 commits)
+
 ## Configuration
 
 ### Config File (YAML)

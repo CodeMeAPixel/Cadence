@@ -10,9 +10,12 @@
 report.*
 .ideas/*
 
+reports/*
 .github/workflows/*
-./cadence.yml
-./cadence.yaml
+./.cadence.yml
+./.cadence.yaml
+.cadence.yml
+.cadence.yaml
 
 # Test binary, built with `go test -c`
 *.test

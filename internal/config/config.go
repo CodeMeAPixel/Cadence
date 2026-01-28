@@ -13,6 +13,7 @@ type Config struct {
 	Thresholds   detector.Thresholds
 	ExcludeFiles []string
 	Webhook      WebhookConfig
+	AI           AIConfig
 }
 
 // WebhookConfig holds webhook server configuration
@@ -26,8 +27,28 @@ type WebhookConfig struct {
 	WriteTimeout int
 }
 
+// AIConfig holds AI analysis configuration
+type AIConfig struct {
+	Enabled  bool
+	Provider string
+	APIKey   string
+	Model    string
+}
+
 func Load(configFile string) (*Config, error) {
 	v := viper.New()
+
+	// Set defaults
+	v.SetDefault("thresholds.suspicious_additions", 500)
+	v.SetDefault("thresholds.suspicious_deletions", 1000)
+	v.SetDefault("thresholds.max_additions_per_min", 100)
+	v.SetDefault("thresholds.max_deletions_per_min", 500)
+	v.SetDefault("thresholds.min_time_delta_seconds", 60)
+	v.SetDefault("thresholds.max_files_per_commit", 50)
+	v.SetDefault("thresholds.max_addition_ratio", 0.95)
+	v.SetDefault("thresholds.min_deletion_ratio", 0.95)
+	v.SetDefault("thresholds.min_commit_size_ratio", 100)
+	v.SetDefault("thresholds.enable_precision_analysis", true)
 
 	if configFile != "" {
 		v.SetConfigFile(configFile)
@@ -76,6 +97,15 @@ func Load(configFile string) (*Config, error) {
 	config.Webhook.WriteTimeout = v.GetInt("webhook.write_timeout")
 	if config.Webhook.WriteTimeout == 0 {
 		config.Webhook.WriteTimeout = 30
+	}
+
+	// Load AI configuration
+	config.AI.Enabled = v.GetBool("ai.enabled")
+	config.AI.Provider = v.GetString("ai.provider")
+	config.AI.APIKey = v.GetString("ai.api_key")
+	config.AI.Model = v.GetString("ai.model")
+	if config.AI.Model == "" {
+		config.AI.Model = "gpt-4o-mini"
 	}
 
 	return config, nil
@@ -134,6 +164,20 @@ webhook:
   # Request timeouts in seconds
   read_timeout: 30
   write_timeout: 30
+
+# AI ANALYSIS CONFIGURATION (Optional - requires API key)
+ai:
+  # Enable/disable AI-powered code analysis
+  enabled: false
+  
+  # AI provider ("openai" only for now)
+  provider: "openai"
+  
+  # OpenAI API key (or set via CADENCE_AI_KEY environment variable)
+  api_key: ""
+  
+  # OpenAI model (gpt-4o-mini recommended for efficiency)
+  model: "gpt-4o-mini"
 `
 
 	return os.WriteFile(path, []byte(sample), 0o600)
