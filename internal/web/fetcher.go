@@ -70,32 +70,23 @@ func (f *Fetcher) Fetch(url string) (*PageContent, error) {
 		Headers:    resp.Header,
 	}
 
-	// Extract title
 	content.Title = strings.TrimSpace(doc.Find("title").First().Text())
 
-	// Extract meta description
 	metaDesc, _ := doc.Find("meta[name='description']").Attr("content")
 	content.Description = metaDesc
 
-	// Extract main body text
-	// Remove scripts and styles
 	doc.Find("script, style").Remove()
 
-	// Get all text content
 	allText := doc.Find("body").Text()
 	content.Body = strings.TrimSpace(allText)
-
-	// Also extract h1, h2, h3, p tags for structured analysis
 	content.AllText = extractStructuredText(doc)
 
 	return content, nil
 }
 
-// extractStructuredText extracts text from important elements
 func extractStructuredText(doc *goquery.Document) string {
 	var texts []string
 
-	// Headers
 	doc.Find("h1, h2, h3, h4, h5, h6").Each(func(_ int, s *goquery.Selection) {
 		text := strings.TrimSpace(s.Text())
 		if text != "" {
@@ -103,15 +94,13 @@ func extractStructuredText(doc *goquery.Document) string {
 		}
 	})
 
-	// Paragraphs
 	doc.Find("p").Each(func(_ int, s *goquery.Selection) {
 		text := strings.TrimSpace(s.Text())
-		if len(text) > 20 { // Skip very short paragraphs
+		if len(text) > 20 {
 			texts = append(texts, text)
 		}
 	})
 
-	// Lists
 	doc.Find("li").Each(func(_ int, s *goquery.Selection) {
 		text := strings.TrimSpace(s.Text())
 		if text != "" {
