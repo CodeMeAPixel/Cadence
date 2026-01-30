@@ -13,10 +13,8 @@ type SuspiciousCommit struct {
 	AdditionVelocity *metrics.VelocityMetrics
 	DeletionVelocity *metrics.VelocityMetrics
 	Reasons          []string
-	// Score is a confidence metric (0.0-1.0) for how suspicious the commit is
-	Score float64
-	// AIAnalysis is optional AI-powered analysis of the suspicious code
-	AIAnalysis string
+	Score            float64
+	AIAnalysis       string
 }
 
 type Detector struct {
@@ -29,7 +27,6 @@ func New(thresholds *Thresholds) (*Detector, error) {
 		return nil, fmt.Errorf("invalid thresholds: %w", err)
 	}
 
-	// Initialize strategies based on configured thresholds
 	strategies := make([]DetectionStrategy, 0)
 
 	if thresholds.SuspiciousAdditions > 0 || thresholds.SuspiciousDeletions > 0 {
@@ -56,11 +53,10 @@ func New(thresholds *Thresholds) (*Detector, error) {
 		strategies = append(strategies, NewPrecisionStrategy(0.85))
 	}
 
-	// Add new AI slop detection strategies
 	strategies = append(strategies, NewCommitMessageStrategy())
 	strategies = append(strategies, NewNamingPatternStrategy())
 	strategies = append(strategies, NewStructuralConsistencyStrategy())
-	strategies = append(strategies, NewBurstPatternStrategy(10)) // Max 10 commits per hour
+	strategies = append(strategies, NewBurstPatternStrategy(10))
 	strategies = append(strategies, NewErrorHandlingPatternStrategy())
 	strategies = append(strategies, NewTemplatePatternStrategy())
 	strategies = append(strategies, NewFileExtensionPatternStrategy())

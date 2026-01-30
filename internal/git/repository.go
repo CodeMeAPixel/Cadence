@@ -22,13 +22,10 @@ type Repository interface {
 	Close() error
 }
 
-// CommitPairProvider is implemented by repositories that can produce commit pairs
-// from a slice of commits. `gitRepository` implements this.
 type CommitPairProvider interface {
 	GetCommitPairs(commits []*Commit) ([]*CommitPair, error)
 }
 
-// DiffProvider is implemented by repositories that can provide diff content
 type DiffProvider interface {
 	GetCommitDiff(fromHash, toHash string) (string, error)
 }
@@ -48,7 +45,6 @@ func OpenRepository(path string, opts *RepositoryOptions) (Repository, error) {
 		opts = &RepositoryOptions{}
 	}
 
-	// Validate that the path exists and is a git repository
 	r, err := git.PlainOpen(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open repository at '%s': %w", path, err)
@@ -289,7 +285,6 @@ func (r *gitRepository) Close() error {
 	return nil
 }
 
-// GetCommitDiff returns the actual diff content between two commits
 func (r *gitRepository) GetCommitDiff(fromHash, toHash string) (string, error) {
 	fromCommit, err := r.repo.CommitObject(plumbing.NewHash(fromHash))
 	if err != nil {

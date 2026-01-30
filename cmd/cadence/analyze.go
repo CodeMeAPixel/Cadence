@@ -255,14 +255,13 @@ func cloneRemoteRepo(repoURL string) (string, func() error, error) {
 	return tempDir, cleanup, nil
 }
 
-// performAIAnalysis runs AI analysis on suspicious commits
 func performAIAnalysis(suspicious []*detector.SuspiciousCommit, aiConfig *config.AIConfig) error {
 	aiAnalyzer, err := ai.NewAnalyzer(&ai.Config{
 		Enabled:   aiConfig.Enabled,
 		Provider:  aiConfig.Provider,
 		APIKey:    aiConfig.APIKey,
 		Model:     aiConfig.Model,
-		MaxTokens: 500, // Keep it efficient
+		MaxTokens: 500,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to create AI analyzer: %w", err)
@@ -275,12 +274,10 @@ func performAIAnalysis(suspicious []*detector.SuspiciousCommit, aiConfig *config
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
-	// Analyze each suspicious commit
 	for i, commit := range suspicious {
-		// Get the actual code additions for this commit
 		additions := getCommitAdditions(commit.Pair)
 		if additions == "" {
-			continue // Skip if no additions to analyze
+			continue
 		}
 
 		fmt.Fprintf(os.Stderr, "  Analyzing commit %d/%d: %s...\n", i+1, len(suspicious), commit.Pair.Current.Hash[:8])
@@ -297,15 +294,12 @@ func performAIAnalysis(suspicious []*detector.SuspiciousCommit, aiConfig *config
 	return nil
 }
 
-// getCommitAdditions extracts the code additions from a commit pair
 func getCommitAdditions(pair *git.CommitPair) string {
 	if pair == nil || pair.Current == nil {
 		return ""
 	}
 
-	// Use actual diff content if available
 	if pair.DiffContent != "" {
-		// Extract only the added lines for AI analysis
 		lines := strings.Split(pair.DiffContent, "\n")
 		addedLines := make([]string, 0)
 

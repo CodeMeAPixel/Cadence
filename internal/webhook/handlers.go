@@ -15,19 +15,16 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// WebhookHandlers handles incoming webhook requests
 type WebhookHandlers struct {
 	secret    string
 	queue     *JobQueue
 	processor *AnalysisProcessor
 }
 
-// AnalysisProcessor implements JobProcessor for running Cadence analysis
 type AnalysisProcessor struct {
 	DetectorThresholds *detector.Thresholds
 }
 
-// NewWebhookHandlers creates a new webhook handler
 func NewWebhookHandlers(secret string, queue *JobQueue, thresholds *detector.Thresholds) *WebhookHandlers {
 	return &WebhookHandlers{
 		secret: secret,
@@ -38,15 +35,7 @@ func NewWebhookHandlers(secret string, queue *JobQueue, thresholds *detector.Thr
 	}
 }
 
-// Process implements the JobProcessor interface for analysis
 func (ap *AnalysisProcessor) Process(ctx context.Context, job *WebhookJob) error {
-	// In a real implementation, this would:
-	// 1. Clone the repository
-	// 2. Run analysis on the commits
-	// 3. Store results
-	// 4. Post results back to GitHub/GitLab if configured
-
-	// For now, we'll create a mock analysis result
 	job.Result = &JobResult{
 		JobID:             job.ID,
 		RepoName:          job.RepoName,
@@ -55,13 +44,9 @@ func (ap *AnalysisProcessor) Process(ctx context.Context, job *WebhookJob) error
 		Suspicions:        make([]Suspicion, 0),
 		AnalyzedAt:        time.Now(),
 	}
-
-	// Webhook analysis is currently a placeholder
-	// Full implementation requires repository cloning and analysis orchestration
 	return nil
 }
 
-// RegisterRoutes registers webhook routes on the Fiber app
 func (wh *WebhookHandlers) RegisterRoutes(app *fiber.App) {
 	app.Post("/webhooks/github", wh.HandleGithubWebhook)
 	app.Post("/webhooks/gitlab", wh.HandleGitlabWebhook)
@@ -70,9 +55,7 @@ func (wh *WebhookHandlers) RegisterRoutes(app *fiber.App) {
 	app.Get("/health", wh.HealthCheck)
 }
 
-// HandleGithubWebhook handles incoming GitHub push webhooks
 func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
-	// Verify webhook signature
 	signature := c.Get("X-Hub-Signature-256")
 	if signature == "" {
 		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
@@ -87,7 +70,6 @@ func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
 		})
 	}
 
-	// Parse payload
 	var payload GithubPushPayload
 	if err := json.Unmarshal(body, &payload); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -95,10 +77,9 @@ func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
 		})
 	}
 
-	// Extract branch name from ref (e.g., "refs/heads/main" -> "main")
+	// Extract branch from ref (e.g., "refs/heads/main" -> "main")
 	branch := strings.TrimPrefix(payload.Ref, "refs/heads/")
 
-	// Convert to WebhookJob
 	job := &WebhookJob{
 		EventType: "github_push",
 		RepoURL:   payload.Repository.URL,
@@ -108,7 +89,6 @@ func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
 		Commits:   make([]WebhookCommit, 0),
 	}
 
-	// Convert commits
 	for _, commit := range payload.Commits {
 		timestamp, _ := time.Parse(time.RFC3339, commit.Timestamp)
 		job.Commits = append(job.Commits, WebhookCommit{
@@ -123,7 +103,6 @@ func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
 		})
 	}
 
-	// Enqueue the job
 	if err := wh.queue.Enqueue(job); err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
@@ -136,9 +115,7 @@ func (wh *WebhookHandlers) HandleGithubWebhook(c *fiber.Ctx) error {
 	})
 }
 
-// HandleGitlabWebhook handles incoming GitLab push webhooks
 func (wh *WebhookHandlers) HandleGitlabWebhook(c *fiber.Ctx) error {
-	// Verify webhook token
 	token := c.Get("X-Gitlab-Token")
 	if token == "" || token != wh.secret {
 		return c.Status(http.StatusUnauthorized).JSON(fiber.Map{
@@ -146,7 +123,6 @@ func (wh *WebhookHandlers) HandleGitlabWebhook(c *fiber.Ctx) error {
 		})
 	}
 
-	// Parse GitLab payload (simplified version)
 	var payload map[string]interface{}
 	if err := c.BodyParser(&payload); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
@@ -154,14 +130,11 @@ func (wh *WebhookHandlers) HandleGitlabWebhook(c *fiber.Ctx) error {
 		})
 	}
 
-	// For now, return a placeholder response
-	// Full implementation would parse GitLab-specific webhook format
 	return c.Status(http.StatusAccepted).JSON(fiber.Map{
 		"status": "pending",
 	})
 }
 
-// GetJobStatus retrieves the status of a specific job
 func (wh *WebhookHandlers) GetJobStatus(c *fiber.Ctx) error {
 	jobID := c.Params("id")
 
@@ -183,7 +156,6 @@ func (wh *WebhookHandlers) GetJobStatus(c *fiber.Ctx) error {
 	})
 }
 
-// ListJobs lists recent webhook jobs
 func (wh *WebhookHandlers) ListJobs(c *fiber.Ctx) error {
 	limit := c.QueryInt("limit", 50)
 	jobs := wh.queue.ListJobs(limit)
@@ -206,7 +178,6 @@ func (wh *WebhookHandlers) ListJobs(c *fiber.Ctx) error {
 	})
 }
 
-// HealthCheck returns server health status
 func (wh *WebhookHandlers) HealthCheck(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"status": "ok",
@@ -214,9 +185,8 @@ func (wh *WebhookHandlers) HealthCheck(c *fiber.Ctx) error {
 	})
 }
 
-// verifySignature verifies the GitHub webhook signature
+// GitHub sends signature as "sha256=<hash>"
 func (wh *WebhookHandlers) verifySignature(body []byte, signature string) error {
-	// GitHub sends signature as "sha256=<hash>"
 	parts := strings.Split(signature, "=")
 	if len(parts) != 2 {
 		return fmt.Errorf("invalid signature format")
@@ -241,7 +211,6 @@ func (wh *WebhookHandlers) verifySignature(body []byte, signature string) error 
 	return nil
 }
 
-// DefaultAnalysisProcessor is a simple processor that just marks jobs as completed
 func NewDefaultProcessor() JobProcessor {
 	return &AnalysisProcessor{
 		DetectorThresholds: &detector.Thresholds{

@@ -3,26 +3,20 @@ package detector
 import "fmt"
 
 type Thresholds struct {
-	// Size-based detection
 	SuspiciousAdditions int64
 	SuspiciousDeletions int64
 
-	// Velocity-based detection
 	MaxAdditionsPerMin float64
 	MaxDeletionsPerMin float64
 
-	// Timing-based detection
 	MinTimeDeltaSeconds int64
 
-	// File dispersion (batch changes)
 	MaxFilesPerCommit int
 
-	// Ratio-based detection (AI patterns)
-	MaxAdditionRatio   float64 // Default: 0.95 (95% additions)
-	MinDeletionRatio   float64 // Default: 0.95 (95% deletions)
-	MinCommitSizeRatio int64   // Minimum commit size to apply ratio analysis
+	MaxAdditionRatio   float64
+	MinDeletionRatio   float64
+	MinCommitSizeRatio int64
 
-	// Precision/consistency detection
 	EnablePrecisionAnalysis bool
 }
 

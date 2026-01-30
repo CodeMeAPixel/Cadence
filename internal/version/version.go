@@ -1,22 +1,17 @@
 package version
 
-const (
-	// Version is the current version of Cadence
-	Version = "0.1.1"
-	// BuildTime is the build timestamp (set at compile time with -ldflags)
+var (
+	Version   = "unknown"
 	BuildTime = "unknown"
-	// GitCommit is the git commit hash (set at compile time with -ldflags)
 	GitCommit = "unknown"
 )
 
-// String returns the full version string
 func String() string {
 	return Version
 }
 
-// Full returns a detailed version string with build info
 func Full() string {
-	str := "Cadence v" + Version
+	str := "Cadence " + Version
 	if GitCommit != "unknown" && len(GitCommit) > 0 {
 		commit := GitCommit
 		if len(commit) > 8 {

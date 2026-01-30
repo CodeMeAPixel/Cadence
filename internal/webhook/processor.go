@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-// JobQueue manages asynchronous webhook event processing
 type JobQueue struct {
 	jobs       chan *WebhookJob
 	maxWorkers int
@@ -22,12 +21,10 @@ type JobQueue struct {
 	jobStore   map[string]*WebhookJob
 }
 
-// JobProcessor defines the interface for processing webhook jobs
 type JobProcessor interface {
 	Process(ctx context.Context, job *WebhookJob) error
 }
 
-// NewJobQueue creates a new job queue with specified number of workers
 func NewJobQueue(maxWorkers int, processor JobProcessor) *JobQueue {
 	ctx, cancel := context.WithCancel(context.Background())
 	return &JobQueue{
@@ -41,7 +38,6 @@ func NewJobQueue(maxWorkers int, processor JobProcessor) *JobQueue {
 	}
 }
 
-// Start initializes the worker pool
 func (q *JobQueue) Start() error {
 	for i := 0; i < q.maxWorkers; i++ {
 		q.wg.Add(1)
@@ -79,7 +75,6 @@ func (q *JobQueue) Enqueue(job *WebhookJob) error {
 	}
 }
 
-// GetJob retrieves a job by ID
 func (q *JobQueue) GetJob(jobID string) (*WebhookJob, error) {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
@@ -91,7 +86,6 @@ func (q *JobQueue) GetJob(jobID string) (*WebhookJob, error) {
 	return job, nil
 }
 
-// ListJobs returns all jobs (limit last N jobs for memory efficiency)
 func (q *JobQueue) ListJobs(limit int) []*WebhookJob {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
@@ -101,7 +95,6 @@ func (q *JobQueue) ListJobs(limit int) []*WebhookJob {
 		jobs = append(jobs, job)
 	}
 
-	// Sort by timestamp descending (newest first)
 	for i := 0; i < len(jobs)-1; i++ {
 		for j := i + 1; j < len(jobs); j++ {
 			if jobs[j].Timestamp.After(jobs[i].Timestamp) {
@@ -117,7 +110,6 @@ func (q *JobQueue) ListJobs(limit int) []*WebhookJob {
 	return jobs
 }
 
-// worker processes jobs from the queue
 func (q *JobQueue) worker() {
 	defer q.wg.Done()
 

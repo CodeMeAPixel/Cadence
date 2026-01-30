@@ -10,7 +10,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-// PageContent represents fetched website content
 type PageContent struct {
 	URL         string
 	Title       string
@@ -22,13 +21,11 @@ type PageContent struct {
 	FetchedAt   time.Time
 }
 
-// Fetcher handles website content retrieval
 type Fetcher struct {
 	client  *http.Client
 	timeout time.Duration
 }
 
-// NewFetcher creates a new website fetcher
 func NewFetcher(timeout time.Duration) *Fetcher {
 	if timeout == 0 {
 		timeout = 10 * time.Second
@@ -41,7 +38,6 @@ func NewFetcher(timeout time.Duration) *Fetcher {
 	}
 }
 
-// Fetch retrieves and parses website content
 func (f *Fetcher) Fetch(url string) (*PageContent, error) {
 	if !strings.HasPrefix(url, "http://") && !strings.HasPrefix(url, "https://") {
 		url = "https://" + url
@@ -126,7 +122,6 @@ func extractStructuredText(doc *goquery.Document) string {
 	return strings.Join(texts, "\n")
 }
 
-// GetMainContent returns the most relevant content for analysis
 func (pc *PageContent) GetMainContent() string {
 	if pc.AllText != "" {
 		return pc.AllText

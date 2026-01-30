@@ -49,7 +49,6 @@ type Suspicion struct {
 	Score       float64
 }
 
-// GithubPushPayload represents the GitHub push webhook payload
 type GithubPushPayload struct {
 	Ref        string `json:"ref"`
 	Before     string `json:"before"`

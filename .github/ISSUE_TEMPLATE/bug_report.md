@@ -48,5 +48,11 @@ Steps to reproduce the behavior:
 Paste error messages or logs here
 ```
 
+---
+
+**Need Help?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+
+**Security Issue?** See our [Security Policy](.github/SECURITY.md)
+
 ## Possible Solution
 <!-- Optional: suggest a fix or reason for the bug -->

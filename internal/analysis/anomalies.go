@@ -37,20 +37,18 @@ type CommitStatistics struct {
 	TotalLines   int64
 }
 
-// RepositoryBaseline represents statistical baselines for a repository
 type RepositoryBaseline struct {
 	AvgAdditions     float64
 	StdDevAdditions  float64
 	AvgDeletions     float64
 	StdDevDeletions  float64
 	AvgFilesChanged  float64
-	AvgAdditionRatio float64 // additions / (additions + deletions)
+	AvgAdditionRatio float64
 	MedianCommitSize int64
-	Q1CommitSize     int64 // 25th percentile
-	Q3CommitSize     int64 // 75th percentile
+	Q1CommitSize     int64
+	Q3CommitSize     int64
 }
 
-// CalculateBaseline computes statistical baseline from commit pairs
 func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 	if len(pairs) == 0 {
 		return &RepositoryBaseline{}
@@ -58,7 +56,6 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 
 	baseline := &RepositoryBaseline{}
 
-	// Calculate mean values
 	var sumAdditions, sumDeletions, sumFiles float64
 	var additionRatios []float64
 	var commitSizes []int64
@@ -73,7 +70,6 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 		sumDeletions += float64(stats.Deletions)
 		sumFiles += float64(stats.FilesChanged)
 
-		// Calculate addition ratio
 		total := float64(stats.Additions + stats.Deletions)
 		if total > 0 {
 			ratio := float64(stats.Additions) / total
@@ -89,7 +85,6 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 	baseline.AvgDeletions = sumDeletions / n
 	baseline.AvgFilesChanged = sumFiles / n
 
-	// Calculate standard deviations
 	var sumAddSqDev, sumDelSqDev float64
 	for _, pair := range pairs {
 		if pair.Stats.Additions == 0 && pair.Stats.Deletions == 0 {
@@ -102,7 +97,6 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 	baseline.StdDevAdditions = math.Sqrt(sumAddSqDev / n)
 	baseline.StdDevDeletions = math.Sqrt(sumDelSqDev / n)
 
-	// Calculate average ratio
 	if len(additionRatios) > 0 {
 		sum := 0.0
 		for _, r := range additionRatios {
@@ -111,7 +105,6 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 		baseline.AvgAdditionRatio = sum / float64(len(additionRatios))
 	}
 
-	// Calculate percentiles for commit size
 	if len(commitSizes) > 0 {
 		baseline.MedianCommitSize = calculatePercentileValue(commitSizes, 50)
 		baseline.Q1CommitSize = calculatePercentileValue(commitSizes, 25)
@@ -121,13 +114,11 @@ func CalculateBaseline(pairs []*git.CommitPair) *RepositoryBaseline {
 	return baseline
 }
 
-// DetectStatisticalAnomalies identifies commits that deviate significantly from baseline
-// A score of |z| > 2 is considered noteworthy; |z| > 3 is very significant
 func DetectStatisticalAnomalies(pair *git.CommitPair, baseline *RepositoryBaseline) []*StatisticalAnomaly {
 	anomalies := make([]*StatisticalAnomaly, 0)
 
 	if baseline.StdDevAdditions == 0 && baseline.StdDevDeletions == 0 {
-		return anomalies // Cannot calculate z-scores without deviation
+		return anomalies
 	}
 
 	// Check additions anomaly
@@ -162,11 +153,9 @@ func DetectStatisticalAnomalies(pair *git.CommitPair, baseline *RepositoryBaseli
 		}
 	}
 
-	// Check for unusual addition/deletion ratio
 	if pair.Stats.Additions > 0 || pair.Stats.Deletions > 0 {
 		total := float64(pair.Stats.Additions + pair.Stats.Deletions)
 		ratio := float64(pair.Stats.Additions) / total
-		// Flag if heavily skewed toward additions (>90% adds, rarely happens in maintenance)
 		if ratio > 0.9 && pair.Stats.Additions > int64(baseline.AvgAdditions*2) {
 			anomalies = append(anomalies, &StatisticalAnomaly{
 				Type:          AnomalyUnusualRatio,
@@ -183,7 +172,6 @@ func DetectStatisticalAnomalies(pair *git.CommitPair, baseline *RepositoryBaseli
 	return anomalies
 }
 
-// calculatePercentileValue returns the value at a given percentile (0-100)
 func calculatePercentileValue(sortedValues []int64, percentile float64) int64 {
 	if len(sortedValues) == 0 {
 		return 0
@@ -193,7 +181,6 @@ func calculatePercentileValue(sortedValues []int64, percentile float64) int64 {
 		return sortedValues[0]
 	}
 
-	// Simple linear interpolation percentile calculation
 	index := (percentile / 100.0) * float64(len(sortedValues)-1)
 	lower := int(math.Floor(index))
 	upper := int(math.Ceil(index))
@@ -206,7 +193,6 @@ func calculatePercentileValue(sortedValues []int64, percentile float64) int64 {
 	return int64(float64(sortedValues[lower])*(1-weight) + float64(sortedValues[upper])*weight)
 }
 
-// AnalyzeTimingPatterns detects unusual timing patterns between commits
 type TimingAnomaly struct {
 	CommitHash          string
 	TimeSinceLastCommit float64 // minutes
@@ -214,7 +200,6 @@ type TimingAnomaly struct {
 	Description         string
 }
 
-// DetectTimingAnomalies identifies commits with unusual time gaps
 func DetectTimingAnomalies(pairs []*git.CommitPair) []*TimingAnomaly {
 	anomalies := make([]*TimingAnomaly, 0)
 
@@ -222,13 +207,11 @@ func DetectTimingAnomalies(pairs []*git.CommitPair) []*TimingAnomaly {
 		return anomalies
 	}
 
-	// Calculate typical inter-commit times
 	var timeDeltasMinutes []float64
 	for _, pair := range pairs {
 		timeDeltasMinutes = append(timeDeltasMinutes, pair.TimeDelta.Minutes())
 	}
 
-	// Calculate mean and std dev
 	var sum float64
 	for _, td := range timeDeltasMinutes {
 		sum += td
@@ -241,19 +224,18 @@ func DetectTimingAnomalies(pairs []*git.CommitPair) []*TimingAnomaly {
 	}
 	stdDev := math.Sqrt(sumSqDev / float64(len(timeDeltasMinutes)))
 
-	// Flag commits with unusual timing (>2 sigma away)
 	for _, pair := range pairs {
 		timeDelta := pair.TimeDelta.Minutes()
 		if stdDev > 0 {
 			zScore := (timeDelta - meanTime) / stdDev
-			if zScore > 2.0 { // Much longer than normal
+			if zScore > 2.0 {
 				anomalies = append(anomalies, &TimingAnomaly{
 					CommitHash:          pair.Current.Hash,
 					TimeSinceLastCommit: timeDelta,
 					IsAnomalous:         true,
 					Description:         "Unusually long time since last commit (possible batch processing)",
 				})
-			} else if zScore < -2.0 && timeDelta < 1.0 { // Much shorter than normal
+			} else if zScore < -2.0 && timeDelta < 1.0 {
 				anomalies = append(anomalies, &TimingAnomaly{
 					CommitHash:          pair.Current.Hash,
 					TimeSinceLastCommit: timeDelta,

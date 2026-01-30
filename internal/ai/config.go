@@ -7,7 +7,6 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-// Config holds AI service configuration
 type Config struct {
 	Enabled   bool
 	Provider  string // "openai" or empty to disable
@@ -16,7 +15,6 @@ type Config struct {
 	MaxTokens int
 }
 
-// LoadConfig loads AI configuration from environment or defaults
 func LoadConfig() *Config {
 	return &Config{
 		Enabled:   os.Getenv("CADENCE_AI_ENABLED") == "true",
@@ -34,13 +32,11 @@ func getEnvOrDefault(key, defaultVal string) string {
 	return defaultVal
 }
 
-// Analyzer provides AI-powered analysis
 type Analyzer interface {
 	AnalyzeSuspiciousCode(ctx context.Context, commitHash string, additions string) (string, error)
 	IsConfigured() bool
 }
 
-// NewAnalyzer creates a new AI analyzer based on configuration
 func NewAnalyzer(cfg *Config) (Analyzer, error) {
 	if !cfg.Enabled || cfg.APIKey == "" {
 		return &NoOpAnalyzer{}, nil
@@ -58,7 +54,6 @@ func NewAnalyzer(cfg *Config) (Analyzer, error) {
 	}
 }
 
-// NoOpAnalyzer is a no-op implementation when AI is disabled
 type NoOpAnalyzer struct{}
 
 func (n *NoOpAnalyzer) AnalyzeSuspiciousCode(ctx context.Context, commitHash string, additions string) (string, error) {

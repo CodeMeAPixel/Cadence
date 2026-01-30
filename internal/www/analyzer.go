@@ -7,22 +7,18 @@ import (
 	"unicode"
 )
 
-// Package www provides website and code content analysis for detecting
-// AI-generated content and "slop" patterns in code and documentation.
-
-// ContentAnalysis represents analysis results for code/content
 type ContentAnalysis struct {
 	TotalLines            int
 	TotalTokens           int
 	UniqueWords           int
 	AverageWordLength     float64
 	AverageLineLength     float64
-	CommentDensity        float64 // 0.0-1.0: ratio of comment lines to code lines
-	SuspiciousnessScore   float64 // 0.0-1.0: overall likelihood of AI generation
+	CommentDensity        float64
+	SuspiciousnessScore   float64
 	PatternMatches        []*PatternMatch
-	NamingConsistency     float64 // 0.0-1.0: how consistent naming conventions are
-	FormattingConsistency float64 // 0.0-1.0: how consistent code formatting is
-	StructuralConsistency float64 // 0.0-1.0: how consistent function/class structures are
+	NamingConsistency     float64
+	FormattingConsistency float64
+	StructuralConsistency float64
 	AILikelihoodFactors   map[string]float64
 	HasSuspiciousPatterns bool
 	HasExcessiveComments  bool
@@ -31,7 +27,6 @@ type ContentAnalysis struct {
 	HasNamingAnomaly      bool
 }
 
-// PatternType represents different types of suspicious patterns
 type PatternType string
 
 const (
@@ -47,16 +42,14 @@ const (
 	PatternOverExplanation      PatternType = "over_explanation"
 )
 
-// PatternMatch represents a detected suspicious pattern in code/content
 type PatternMatch struct {
 	Type        PatternType
-	Severity    float64 // 0.0-1.0
+	Severity    float64
 	Description string
 	Location    string
 	Evidence    string
 }
 
-// Analyzer provides code content analysis capabilities
 type Analyzer struct {
 	strictMode bool
 }

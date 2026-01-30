@@ -8,7 +8,6 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-// AnalysisResult contains structured AI analysis output
 type AnalysisResult struct {
 	Assessment string  // "likely AI-generated", "possibly AI-generated", "unlikely AI-generated"
 	Confidence float64 // 0.0-1.0
@@ -16,17 +15,14 @@ type AnalysisResult struct {
 	Indicators []string
 }
 
-// OpenAIAnalyzer uses OpenAI's API for AI-powered analysis
 type OpenAIAnalyzer struct {
 	client *openai.Client
 	config *Config
 }
 
-// NewOpenAIAnalyzer creates a new OpenAI analyzer
 func NewOpenAIAnalyzer(apiKeyOrConfig interface{}, model ...string) (*OpenAIAnalyzer, error) {
 	var apiKey, modelStr string
 
-	// Handle both old (Config) and new (string, string) signatures
 	switch v := apiKeyOrConfig.(type) {
 	case *Config:
 		if v.APIKey == "" {
@@ -57,7 +53,6 @@ func NewOpenAIAnalyzer(apiKeyOrConfig interface{}, model ...string) (*OpenAIAnal
 	}, nil
 }
 
-// AnalyzeWithSystemPrompt performs analysis with custom system and user prompts
 func (a *OpenAIAnalyzer) AnalyzeWithSystemPrompt(ctx context.Context, systemPrompt, userPrompt string) (string, error) {
 	resp, err := a.client.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 		Model: a.config.Model,
@@ -86,14 +81,12 @@ func (a *OpenAIAnalyzer) AnalyzeWithSystemPrompt(ctx context.Context, systemProm
 	return resp.Choices[0].Message.Content, nil
 }
 
-// AnalyzeSuspiciousCode sends suspicious code to OpenAI for analysis
 func (a *OpenAIAnalyzer) AnalyzeSuspiciousCode(ctx context.Context, commitHash string, additions string) (string, error) {
 	result, err := a.analyzeWithReasoning(ctx, commitHash, additions)
 	if err != nil {
 		return "", err
 	}
 
-	// Format for output
 	output := fmt.Sprintf("%s (confidence: %.0f%%)", result.Assessment, result.Confidence*100)
 	if result.Reasoning != "" {
 		output += fmt.Sprintf("\nReasoning: %s", result.Reasoning)
@@ -101,9 +94,7 @@ func (a *OpenAIAnalyzer) AnalyzeSuspiciousCode(ctx context.Context, commitHash s
 	return output, nil
 }
 
-// analyzeWithReasoning performs multi-step AI analysis with structured reasoning
 func (a *OpenAIAnalyzer) analyzeWithReasoning(ctx context.Context, commitHash string, additions string) (*AnalysisResult, error) {
-	// Limit code size to keep tokens down
 	codeSnippet := additions
 	if len(codeSnippet) > 2000 {
 		codeSnippet = codeSnippet[:2000] + "...[truncated]"
@@ -186,20 +177,16 @@ Provide your assessment in the JSON format specified.`, commitHash[:8], codeSnip
 		return nil, fmt.Errorf("no response from OpenAI")
 	}
 
-	// Parse the response
 	return parseAnalysisResult(resp.Choices[0].Message.Content)
 }
 
-// parseAnalysisResult extracts structured data from AI response
 func parseAnalysisResult(responseText string) (*AnalysisResult, error) {
 	result := &AnalysisResult{}
 
-	// Try to extract JSON (improved parsing)
 	jsonStart := strings.Index(responseText, "{")
 	jsonEnd := strings.LastIndex(responseText, "}")
 
 	if jsonStart == -1 || jsonEnd == -1 {
-		// Fallback to simple parsing
 		if strings.Contains(responseText, "likely") {
 			result.Assessment = "likely AI-generated"
 			result.Confidence = 0.8
@@ -216,7 +203,6 @@ func parseAnalysisResult(responseText string) (*AnalysisResult, error) {
 
 	jsonStr := responseText[jsonStart : jsonEnd+1]
 
-	// Simple JSON parsing (avoiding extra dependencies)
 	if strings.Contains(jsonStr, "likely") {
 		result.Assessment = "likely AI-generated"
 		result.Confidence = 0.8
@@ -228,25 +214,22 @@ func parseAnalysisResult(responseText string) (*AnalysisResult, error) {
 		result.Confidence = 0.2
 	}
 
-	// Extract confidence if present
 	confStart := strings.Index(jsonStr, `"confidence":`)
 	if confStart != -1 {
 		confStart += 13
 		confEnd := strings.IndexAny(jsonStr[confStart:], ",}")
 		if confEnd != -1 {
 			confStr := strings.TrimSpace(jsonStr[confStart : confStart+confEnd])
-			// Try to parse as float (simplified)
 			if confStr == "1" || confStr == "1.0" {
 				result.Confidence = 1.0
 			} else if confStr == "0" || confStr == "0.0" {
 				result.Confidence = 0.0
 			} else if confStr[0:1] == "0" {
-				result.Confidence = 0.5 // Default for uncertain
+				result.Confidence = 0.5
 			}
 		}
 	}
 
-	// Extract reasoning
 	reasonStart := strings.Index(jsonStr, `"reasoning":`)
 	if reasonStart != -1 {
 		reasonStart += 12
@@ -267,7 +250,6 @@ func min(a, b int) int {
 	return b
 }
 
-// IsConfigured returns whether OpenAI is properly configured
 func (a *OpenAIAnalyzer) IsConfigured() bool {
 	return a.config.APIKey != ""
 }

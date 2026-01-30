@@ -36,3 +36,9 @@ assignees: ''
 ## Implementation Notes
 
 <!-- Optional: If you have ideas about how this could be implemented -->
+
+---
+
+**Questions?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+
+**Want to Contribute?** See [CONTRIBUTING.md](.github/CONTRIBUTING.md)

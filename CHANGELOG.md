@@ -25,11 +25,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Optional AI Expert Analysis**: Integration with OpenAI for additional validation
 - **User-friendly Reports**: Formatted ASCII reports with pattern details
 
+#### Community & Governance
+- **Security Policy**: Added `SECURITY.md` with vulnerability reporting procedures
+  - Responsible disclosure guidelines
+  - Direct contact method: hey@codemeapixel.dev
+  - Support for private security advisories
+  - Supported version information
+- **Code of Conduct**: Added `CODE_OF_CONDUCT.md` for community standards
+  - Inclusive behavior guidelines
+  - Anti-harassment and discrimination policies
+  - Clear enforcement procedures
+- **Contributing Guidelines**: Added `CONTRIBUTING.md` with development workflow
+  - Setup instructions for all platforms
+  - Code style and testing requirements
+  - Commit message conventions
+  - PR process and checklist
+  - Recognition for contributors
+- **Issue Templates**: Expanded GitHub issue templates
+  - Bug report template with environment details
+  - Feature request template with use cases
+  - Documentation improvement template
+  - All templates include contact information
+
+#### GitHub Infrastructure
+- **Pull Request Template**: Added `.github/pull_request_template.md`
+  - Type of change checklist (bug, feature, breaking, docs, etc.)
+  - Testing requirements
+  - Code quality checklist
+  - Breaking changes documentation
+- **Funding Configuration**: Updated `FUNDING.yml` with sponsorship links
+  - GitHub sponsors link
+  - Personal website and social media links
+- **GitHub Workflows**: Added automated CI/CD pipeline
+  - `test.yml` - Cross-platform testing on push and PR
+  - Tests on macOS, Ubuntu, and Windows
+  - Go 1.23 and 1.24 compatibility testing
+  - Build, test, and vet steps
+
+#### Build System Improvements
+- **Cross-Platform Makefile**: Updated Makefile with OS detection
+  - Windows builds use PowerShell scripts automatically
+  - Unix/Linux/macOS builds use native shell commands
+  - Automatic version injection on all platforms
+  - Unified `make build` command works everywhere
+  - Platform-specific `make install` support
+- **Build Scripts**: Organized build utilities
+  - `scripts/build.sh` for Unix/Linux/macOS
+  - `scripts/build.ps1` for Windows PowerShell
+  - Automatic version, commit, and timestamp injection
+
+#### Documentation Updates
+- **Build Documentation**: Clarified build instructions in README
+  - Quick start with `make build` for all platforms
+  - Alternative build methods documented
+  - Version injection behavior explained
+- **.github/README.md**: Added community guidelines overview
+  - Directory structure explanation
+  - Quick links to all community documents
+  - Contact information and contribution encouragement
+
 ### Technical Details
 - **New Package**: `internal/web` for website fetching and content extraction
 - **New Analyzer**: `TextSlopAnalyzer` in `internal/detector/patterns/` for text-based detection
 - **New CLI Command**: `cadence web <url>` for analyzing websites
 - **Dependencies Added**: github.com/PuerkitoBio/goquery for HTML parsing
+
+### Changed
+- **Version Management**: Version now always comes from git tags
+  - No manual version.go updates needed
+  - Automatic injection during build
+  - Git describes for version string format
 
 ### Usage Examples
 ```bash

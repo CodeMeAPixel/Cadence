@@ -10,11 +10,35 @@ Analyze suspicious commits via code patterns, velocity anomalies, and statistica
 
 ### Install
 
+Version information (version, commit hash, build time) is automatically injected during build from git tags.
+
+**Quick Start (all platforms)**
+
 ```bash
 git clone https://github.com/codemeapixel/cadence.git
 cd cadence
+
+make build
+```
+
+The Makefile automatically detects your OS and uses the appropriate build method (PowerShell on Windows, shell on Unix/Linux/macOS).
+
+**Alternative Methods**
+
+```bash
+# Using scripts directly
+./scripts/build.sh        # Linux/macOS
+.\scripts\build.ps1       # Windows
+
+# Direct Go (no version injection)
 go build ./cmd/cadence
 ```
+
+Version injection is automatic when using `make build` or the platform-specific scripts.
+
+
+
+
 
 ### Analyze a Repository
 
@@ -335,7 +359,29 @@ A: Yes. Detection strategies are pluggable interfaces in `internal/detector/`. A
 ### Build
 
 ```bash
+# Using Makefile (Linux/macOS)
+make build
+
+# Or direct Go (all platforms)
 go build ./cmd/cadence
+
+# Version info is automatically injected from git tags via go:generate
+```
+
+### Available Make Targets
+
+```bash
+make build    # Build binary with version injection
+make install  # Install to $GOPATH/bin
+make test     # Run all tests
+make cover    # Run tests with coverage
+make fmt      # Format code
+make tidy     # Tidy dependencies  
+make lint     # Run linter
+make vet      # Run go vet
+make run      # Run application
+make clean    # Clean build artifacts
+make help     # Show all targets
 ```
 
 ### Run Tests
