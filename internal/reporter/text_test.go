@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/detector"
-	"github.com/codemeapixel/cadence/internal/git"
-	"github.com/codemeapixel/cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/metrics"
 )
 
 func TestTextReporter_Generate(t *testing.T) {

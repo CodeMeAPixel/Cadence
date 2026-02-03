@@ -28,7 +28,7 @@ try {
 # Get build time in UTC
 $BUILD_TIME = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
 
-$LDFLAGS = "-ldflags=`"-X github.com/codemeapixel/cadence/internal/version.Version=$VERSION -X github.com/codemeapixel/cadence/internal/version.GitCommit=$COMMIT -X github.com/codemeapixel/cadence/internal/version.BuildTime=$BUILD_TIME`""
+$LDFLAGS = "-ldflags=`"-X github.com/trycadence/cadence/internal/version.Version=$VERSION -X github.com/trycadence/cadence/internal/version.GitCommit=$COMMIT -X github.com/trycadence/cadence/internal/version.BuildTime=$BUILD_TIME`""
 
 Write-Host "Building Cadence..." -ForegroundColor Cyan
 Write-Host "  Version: $VERSION" -ForegroundColor Green

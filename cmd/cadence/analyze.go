@@ -11,13 +11,13 @@ import (
 	gogit "github.com/go-git/go-git/v5"
 	"github.com/spf13/cobra"
 
-	"github.com/codemeapixel/cadence/internal/ai"
-	"github.com/codemeapixel/cadence/internal/analyzer"
-	"github.com/codemeapixel/cadence/internal/config"
-	"github.com/codemeapixel/cadence/internal/detector"
-	"github.com/codemeapixel/cadence/internal/git"
-	"github.com/codemeapixel/cadence/internal/metrics"
-	"github.com/codemeapixel/cadence/internal/reporter"
+	"github.com/TryCadence/Cadence/internal/ai"
+	"github.com/TryCadence/Cadence/internal/analyzer"
+	"github.com/TryCadence/Cadence/internal/config"
+	"github.com/TryCadence/Cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/reporter"
 )
 
 var (

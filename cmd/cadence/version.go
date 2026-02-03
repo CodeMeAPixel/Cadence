@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/codemeapixel/cadence/internal/version"
+	"github.com/TryCadence/Cadence/internal/version"
 )
 
 var versionCmd = &cobra.Command{

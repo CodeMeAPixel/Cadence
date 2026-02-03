@@ -1,9 +1,9 @@
 package detector
 
 import (
-	"github.com/codemeapixel/cadence/internal/detector/patterns"
-	"github.com/codemeapixel/cadence/internal/git"
-	"github.com/codemeapixel/cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/detector/patterns"
+	"github.com/TryCadence/Cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/metrics"
 )
 
 type DetectionStrategy interface {

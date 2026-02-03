@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/codemeapixel/cadence/internal/config"
+	"github.com/TryCadence/Cadence/internal/config"
 )
 
 var configCmd = &cobra.Command{

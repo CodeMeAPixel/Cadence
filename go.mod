@@ -1,4 +1,4 @@
-module github.com/codemeapixel/cadence
+module github.com/TryCadence/Cadence
 
 go 1.24.0
 

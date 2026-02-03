@@ -3,8 +3,8 @@ package reporter
 import (
 	"fmt"
 
-	"github.com/codemeapixel/cadence/internal/detector"
-	"github.com/codemeapixel/cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/metrics"
 )
 
 type ReportData struct {

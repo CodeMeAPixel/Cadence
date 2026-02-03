@@ -72,4 +72,4 @@ Any other context, concerns, or decisions made during implementation?
 
 **Thank you for contributing to Cadence!** 🎉
 
-If you have any questions, reach out at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+If you have any questions, reach out at [hey@noslop.tech](mailto:hey@noslop.tech) or [@NoSlopTech](https://x.com/NoSlopTech)

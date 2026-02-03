@@ -8,11 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/analyzer"
-	"github.com/codemeapixel/cadence/internal/detector"
-	"github.com/codemeapixel/cadence/internal/git"
-	"github.com/codemeapixel/cadence/internal/metrics"
-	"github.com/codemeapixel/cadence/internal/reporter"
+	"github.com/TryCadence/Cadence/internal/analyzer"
+	"github.com/TryCadence/Cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/reporter"
 )
 
 // createIntegrationTestRepo creates a test git repository with realistic commit patterns

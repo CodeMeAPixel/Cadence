@@ -50,7 +50,7 @@ Paste error messages or logs here
 
 ---
 
-**Need Help?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+**Need Help?** Contact us at [support@noslop.tech](mailto:support@noslop.tech) or [@NoSlopTech](https://x.com/NoSlopTech)
 
 **Security Issue?** See our [Security Policy](.github/SECURITY.md)
 

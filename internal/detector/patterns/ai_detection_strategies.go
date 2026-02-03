@@ -3,8 +3,8 @@ package patterns
 import (
 	"fmt"
 
-	"github.com/codemeapixel/cadence/internal/git"
-	"github.com/codemeapixel/cadence/internal/metrics"
+	"github.com/TryCadence/Cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/metrics"
 )
 
 type DispersionStrategy struct {

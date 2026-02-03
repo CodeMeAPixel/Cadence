@@ -41,4 +41,4 @@ Any other details that would help improve documentation?
 
 ---
 
-**Questions?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+**Questions?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@NoSlopTech](https://x.com/NoSlopTech)

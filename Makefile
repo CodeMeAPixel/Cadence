@@ -27,7 +27,7 @@ ifneq ($(OS_TYPE),windows)
 VERSION := $(shell git describe --tags --always --dirty 2>/dev/null || echo "0.1.0")
 COMMIT := $(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 BUILD_TIME := $(shell date -u '+%Y-%m-%dT%H:%M:%SZ')
-LDFLAGS := -ldflags="-X github.com/codemeapixel/cadence/internal/version.Version=$(VERSION) -X github.com/codemeapixel/cadence/internal/version.GitCommit=$(COMMIT) -X github.com/codemeapixel/cadence/internal/version.BuildTime=$(BUILD_TIME)"
+LDFLAGS := -ldflags="-X github.com/trycadence/cadence/internal/version.Version=$(VERSION) -X github.com/trycadence/cadence/internal/version.GitCommit=$(COMMIT) -X github.com/trycadence/cadence/internal/version.BuildTime=$(BUILD_TIME)"
 endif
 
 all: build

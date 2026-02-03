@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	webpatterns "github.com/codemeapixel/cadence/internal/web/patterns"
+	webpatterns "github.com/TryCadence/Cadence/internal/web/patterns"
 )
 
 type TextSlopAnalyzer struct {

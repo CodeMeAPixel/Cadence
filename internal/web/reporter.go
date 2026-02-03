@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/detector/patterns"
+	"github.com/TryCadence/Cadence/internal/detector/patterns"
 )
 
 type WebReporter interface {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/config"
-	"github.com/codemeapixel/cadence/internal/webhook"
+	"github.com/TryCadence/Cadence/internal/config"
+	"github.com/TryCadence/Cadence/internal/webhook"
 	"github.com/spf13/cobra"
 )
 

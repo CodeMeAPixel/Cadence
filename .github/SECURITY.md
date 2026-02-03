@@ -6,11 +6,11 @@ If you discover a security vulnerability in Cadence, please **do not open a publ
 
 ### How to Report
 
-**Email**: [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev)
+**Email**: [security@noslop.tech](mailto:security@noslop.tech)
 
-**GitHub**: Open a [private security advisory](https://github.com/CodeMeAPixel/cadence/security/advisories/new) on this repository (if available)
+**GitHub**: Open a [private security advisory](https://github.com/TryCadence/Cadence/security/advisories/new) on this repository (if available)
 
-**Social Media**: [@CodeMeAPixel](https://twitter.com/CodeMeAPixel) on Twitter/X for urgent contact
+**Social Media**: [@NoSlopTech](https://x.com/NoSlopTech) on Twitter/X for urgent contact
 
 ### What to Include
 
@@ -65,4 +65,4 @@ We monitor these dependencies for security issues and update promptly when vulne
 
 ## Questions?
 
-For security-related questions (not vulnerability reports), please contact [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev).
+For security-related questions (not vulnerability reports), please contact [security@noslop.tech](mailto:security@noslop.tech).

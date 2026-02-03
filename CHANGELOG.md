@@ -144,7 +144,7 @@ analyzer.RegisterStrategy(customStrategy)
 #### Community & Governance
 - **Security Policy**: Added `SECURITY.md` with vulnerability reporting procedures
   - Responsible disclosure guidelines
-  - Direct contact method: hey@codemeapixel.dev
+  - Direct contact method: security@noslop.tech
   - Support for private security advisories
   - Supported version information
 - **Code of Conduct**: Added `CODE_OF_CONDUCT.md` for community standards
@@ -441,8 +441,8 @@ cadence web https://example.com --config cadence.yml
 
 ---
 
-[0.2.1]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.2.1
-[0.2.0]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.2.0
-[0.1.2]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.1.2
-[0.1.1]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.1.1
-[0.1.0]: https://github.com/CodeMeAPixel/Cadence/releases/tag/v0.1.0
+[0.2.1]: https://github.com/TryCadence/Cadence/releases/tag/v0.2.1
+[0.2.0]: https://github.com/TryCadence/Cadence/releases/tag/v0.2.0
+[0.1.2]: https://github.com/TryCadence/Cadence/releases/tag/v0.1.2
+[0.1.1]: https://github.com/TryCadence/Cadence/releases/tag/v0.1.1
+[0.1.0]: https://github.com/TryCadence/Cadence/releases/tag/v0.1.0

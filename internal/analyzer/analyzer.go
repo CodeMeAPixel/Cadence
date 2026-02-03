@@ -3,7 +3,7 @@ package analyzer
 import (
 	"fmt"
 
-	"github.com/codemeapixel/cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/git"
 )
 
 type Analyzer struct {

@@ -18,8 +18,8 @@ Version information (version, commit hash, build time) is automatically injected
 **Quick Start (all platforms)**
 
 ```bash
-git clone https://github.com/codemeapixel/cadence.git
-cd cadence
+git clone https://github.com/TryCadence/Cadence.git
+cd Cadence
 
 make build
 ```
@@ -466,7 +466,7 @@ Register it in `internal/detector/detector.go` and it will automatically be used
 Create a custom pattern strategy:
 
 ```go
-import "github.com/codemeapixel/cadence/internal/web/patterns"
+import "github.com/TryCadence/Cadence/internal/web/patterns"
 
 // Create custom strategy
 customStrategy := patterns.NewCustomPatternStrategy(
@@ -502,6 +502,7 @@ func (s *MyCustomStrategy) Detect(content string, wordCount int) *patterns.Detec
     }
     return nil
 }
+<<<<<<< HEAD:.github/README.md
 ```
 
 ## Resources
@@ -510,8 +511,11 @@ func (s *MyCustomStrategy) Detect(content string, wordCount int) *patterns.Detec
 - **Troubleshooting**: [Troubleshooting Guide](https://noslop.tech/docs/troubleshooting-guide)
 - **Security**: [Security Documentation](https://noslop.tech/docs/security)
 - **Contributing**: [Contributing Guide](https://noslop.tech/docs/contributing)
-- **GitHub**: [CodeMeAPixel/Cadence](https://github.com/CodeMeAPixel/Cadence)
+- **GitHub**: [TryCadence/Cadence](https://github.com/TryCadence/Cadence)
 
 ---
 
-*Made with ❤️ by [CodeMeAPixel](https://codemeapixel.dev) | Contact: hey@codemeapixel.dev*
+*Made with ❤️ by [CodeMeAPixel](https://codemeapixel.dev) | Contact: hey@noslop.tech*
+=======
+```
+>>>>>>> 75338e21a94c9ada5059002edd144ad1c8c75c7a:README.md

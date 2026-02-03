@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/viper"
 
-	"github.com/codemeapixel/cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/detector"
 )
 
 type Config struct {

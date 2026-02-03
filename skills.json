@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "AI-generated code detection skill for analyzing Git repositories",
   "author": "CodeMeAPixel",
-  "repository": "https://github.com/CodeMeAPixel/Cadence",
+  "repository": "https://github.com/TryCadence/Cadence",
   "license": "AGPL-3.0",
   "skills": [
     {
@@ -49,7 +49,7 @@
       "examples": [
         {
           "input": {
-            "repository": "https://github.com/CodeMeAPixel/Cadence"
+            "repository": "https://github.com/TryCadence/Cadence"
           },
           "output": {
             "suspicious_commits": [],

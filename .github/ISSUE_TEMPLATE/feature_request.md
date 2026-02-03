@@ -39,6 +39,6 @@ assignees: ''
 
 ---
 
-**Questions?** Contact us at [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev) or [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+**Questions?** Contact us at [support@noslop.tech](mailto:support@noslop.tech) or [@NoSlopTech](https://x.com/NoSlopTech)
 
 **Want to Contribute?** See [CONTRIBUTING.md](.github/CONTRIBUTING.md)

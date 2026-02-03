@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/detector"
+	"github.com/TryCadence/Cadence/internal/detector"
 	"github.com/gofiber/fiber/v2"
 )
 

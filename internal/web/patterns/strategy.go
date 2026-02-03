@@ -41,6 +41,16 @@ func (r *WebPatternRegistry) RegisterDefaults() {
 	r.Register(NewExcessiveTransitionsStrategy())
 	r.Register(NewUniformSentenceLengthStrategy())
 	r.Register(NewAIVocabularyStrategy())
+	r.Register(NewEmojiStrategy())
+	r.Register(NewSpecialCharactersStrategy())
+	r.Register(NewMissingAltTextStrategy())
+	r.Register(NewSemanticHTMLStrategy())
+	r.Register(NewAccessibilityMarkersStrategy())
+	r.Register(NewHeadingHierarchyStrategy())
+	r.Register(NewHardcodedValuesStrategy())
+	r.Register(NewFormIssuesStrategy())
+	r.Register(NewLinkTextQualityStrategy())
+	r.Register(NewGenericStylingStrategy())
 }
 
 func (r *WebPatternRegistry) DetectAll(content string, wordCount int) []*DetectionResult {

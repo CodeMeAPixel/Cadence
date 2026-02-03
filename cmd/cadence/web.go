@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/codemeapixel/cadence/internal/ai"
-	"github.com/codemeapixel/cadence/internal/config"
-	"github.com/codemeapixel/cadence/internal/detector/patterns"
-	"github.com/codemeapixel/cadence/internal/web"
+	"github.com/TryCadence/Cadence/internal/ai"
+	"github.com/TryCadence/Cadence/internal/config"
+	"github.com/TryCadence/Cadence/internal/detector/patterns"
+	"github.com/TryCadence/Cadence/internal/web"
 )
 
 var (

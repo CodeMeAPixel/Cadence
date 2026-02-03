@@ -12,7 +12,7 @@ This project adheres to the [Code of Conduct](.github/CODE_OF_CONDUCT.md). By pa
 
 Before reporting a bug, please:
 
-1. Check the [GitHub Issues](https://github.com/CodeMeAPixel/cadence/issues) to see if it's already reported
+1. Check the [GitHub Issues](https://github.com/TryCadence/Cadence/issues) to see if it's already reported
 2. Check the [Security Policy](.github/SECURITY.md) if it's security-related
 
 When reporting a bug, include:
@@ -24,7 +24,7 @@ When reporting a bug, include:
 
 ### Suggesting Features
 
-1. Check if the feature is already suggested in [Issues](https://github.com/CodeMeAPixel/cadence/issues)
+1. Check if the feature is already suggested in [Issues](https://github.com/TryCadence/Cadence/issues)
 2. Provide a clear use case and benefits
 3. Include examples if possible
 4. Be open to feedback and discussion
@@ -35,8 +35,8 @@ When reporting a bug, include:
 
 ```bash
 # Clone the repository
-git clone https://github.com/CodeMeAPixel/cadence.git
-cd cadence
+git clone https://github.com/TryCadence/Cadence.git
+cd Cadence
 
 # Create a feature branch
 git checkout -b feature/your-feature-name
@@ -168,8 +168,8 @@ Fixes #(issue number)
 ## Questions?
 
 - **GitHub Issues** - For bug reports and feature requests
-- **Email** - [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev)
-- **Social Media** - [@CodeMeAPixel](https://twitter.com/CodeMeAPixel) on Twitter/X
+- **Email** - [support@noslop.tech](mailto:support@noslop.tech)
+- **Social Media** - [@NoSlopTech](https://x.com/NoSlopTech) on Twitter/X
 
 ## License
 

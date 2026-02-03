@@ -3,7 +3,7 @@ package analysis
 import (
 	"math"
 
-	"github.com/codemeapixel/cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/git"
 )
 
 type AnomalyType string

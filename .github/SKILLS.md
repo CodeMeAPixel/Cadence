@@ -61,12 +61,12 @@ Analyzes a single commit for AI-generation patterns.
 ## Installing as a Skill
 
 ```bash
-npx skills add CodeMeAPixel/Cadence
+npx skills add TryCadence/Cadence
 ```
 
 Or specify a version:
 ```bash
-npx skills add CodeMeAPixel/Cadence@0.1.0
+npx skills add TryCadence/Cadence@0.1.0
 ```
 
 ## Integration Examples

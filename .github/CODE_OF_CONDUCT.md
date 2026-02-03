@@ -32,9 +32,9 @@ Community leaders are responsible for clarifying and enforcing our standards of 
 
 If you experience or witness unacceptable behavior, please report it by contacting:
 
-- **Email**: [hey@codemeapixel.dev](mailto:hey@codemeapixel.dev)
+- **Email**: [support@noslop.tech](mailto:support@noslop.tech)
 - **GitHub**: Open a private issue or contact via GitHub
-- **Social Media**: [@CodeMeAPixel](https://twitter.com/CodeMeAPixel)
+- **Social Media**: [@NoSlopTech](https://x.com/NoSlopTech)
 
 All reports will be reviewed and investigated promptly and fairly. Confidentiality of the reporter will be maintained.
 

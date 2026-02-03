@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/codemeapixel/cadence/internal/git"
+	"github.com/TryCadence/Cadence/internal/git"
 )
 
 func TestNew(t *testing.T) {
