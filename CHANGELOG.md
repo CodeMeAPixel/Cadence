@@ -5,6 +5,84 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-02-03
+
+### Added
+
+#### Git Commit Analysis Strategies
+- **Emoji Detection Strategy**: Flags commits with excessive emoji usage
+  - Detects 3+ emojis per commit
+  - Identifies emoji-only commits
+  - Flags high emoji ratio (>20% of message)
+  - Severity scores: 0.5-0.8 based on pattern type
+- **Special Character Strategy**: Detects suspicious special character patterns
+  - Flags excessive hyphens (5+), asterisks (4+), underscores (4+)
+  - Identifies consecutive special character patterns
+  - Severity scores: 0.6-0.9 based on density
+
+#### Web Content Analysis Strategies (8 New)
+Comprehensive web accessibility and HTML quality detection:
+1. **Missing Alt Text Strategy**: Detects images without accessibility descriptions
+   - Regex matches `<img>` tags, checks for `alt=` attribute
+   - Severity: 0.6-1.0 based on missing/empty alt text ratio
+2. **Semantic HTML Strategy**: Flags excessive div usage vs semantic tags
+   - Compares div count vs nav/header/section/article/footer/main/aside tags
+   - Severity: 0.6-0.75 if div ratio > 70%
+3. **Accessibility Markers Strategy**: Detects missing ARIA labels and roles
+   - Checks for aria-label, aria-describedby, aria-hidden, role, lang attributes
+   - Severity: 0.5-0.7 if fewer than 2 types found
+4. **Heading Hierarchy Strategy**: Validates proper heading level sequencing
+   - Ensures h1-h6 tags follow correct hierarchy
+   - Flags non-sequential levels and missing h1 start
+   - Severity: 0.65 if hierarchy issues found
+5. **Hardcoded Values Strategy**: Detects hardcoded pixels/colors instead of CSS variables
+   - Counts inline styles with width/height, pixel values, hardcoded colors
+   - Severity: 0.55-1.0 based on issue count
+6. **Form Issues Strategy**: Flags missing labels and improper input types
+   - Checks for label, placeholder, type, and name attributes on inputs
+   - Severity: 0.7 if multiple issues found
+7. **Link Text Quality Strategy**: Detects generic link text ("click here", "read more")
+   - Matches against list of low-quality link phrases
+   - Severity: 0.4-0.8 based on ratio
+8. **Generic Styling Strategy**: Identifies default colors and missing custom theming
+   - Checks for CSS variables, theme keywords, media queries, custom classes
+   - Severity: 0.5-1.0 based on indicator count
+
+#### Strategy Count Expansion
+- **Total Detection Strategies**: Increased from 26 to 46
+- **Git Strategies**: 18 total (16 existing + 2 new)
+- **Web Strategies**: 28 total (10 existing + 10 new + 8 new accessibility)
+- Updated frontend displays to reflect new strategy counts
+
+### Fixed
+- Removed unused imports from `semantic_html_strategy.go` (unused regexp package)
+- Removed 6 unused variables from semantic HTML strategy compilation
+- All backend compilation errors resolved
+
+### Technical Details
+- **New Files**:
+  - `internal/detector/patterns/emoji_strategy.go` - Git emoji detection
+  - `internal/detector/patterns/special_character_strategy.go` - Git special char detection
+  - `internal/web/patterns/emoji_strategy.go` - Web emoji detection
+  - `internal/web/patterns/special_characters_strategy.go` - Web special char detection
+  - `internal/web/patterns/missing_alt_text_strategy.go`
+  - `internal/web/patterns/semantic_html_strategy.go`
+  - `internal/web/patterns/accessibility_markers_strategy.go`
+  - `internal/web/patterns/heading_hierarchy_strategy.go`
+  - `internal/web/patterns/hardcoded_values_strategy.go`
+  - `internal/web/patterns/form_issues_strategy.go`
+  - `internal/web/patterns/link_text_quality_strategy.go`
+  - `internal/web/patterns/generic_styling_strategy.go`
+- **Updated Files**:
+  - `internal/web/patterns/strategy.go` - RegisterDefaults() registers all 20 web patterns
+  - `src/components/landing/DetectionStrategies.tsx` - Updated to show 46 strategies, 20 web patterns
+  - `src/routes/features.tsx` - Updated strategy count display
+
+### Tests
+- All existing tests pass (206/211 total)
+- 5 pre-existing test failures unrelated to new code
+- New strategies compile and register successfully
+
 ## [0.2.1] - 2026-01-30
 
 ### Added
