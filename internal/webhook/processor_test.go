@@ -138,7 +138,10 @@ func TestJobQueue_StartStop(t *testing.T) {
 			RepoName:  "test-repo",
 		}
 
-		_ = queue2.Enqueue(job)
+		err := queue2.Enqueue(job)
+		if err == nil {
+			t.Error("expected error when enqueueing to stopped queue, got nil")
+		}
 	})
 }
 
