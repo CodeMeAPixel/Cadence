@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+- **Code Quality**: Eliminated all linting errors through comprehensive cleanup
+  - Converted if-else chains to switch statements for better maintainability (5 files)
+  - Combined chained append calls in detector initialization
+  - Extracted helper functions for improved code clarity
+  - Fixed 19+ function signatures to use named return values
+  - Improved string comparison patterns (`len(x) == 0` → `x == ""`)
+
+### Fixed
+- **Security (gosec)**: Fixed file permission issues
+  - Directory permissions: `0755` → `0o750`
+  - File permissions: `0644`/`0600` → `0o600`
+  - Added proper error handling for cleanup operations
+- **Error Handling**: Added checks for unchecked errors
+  - Response body close errors now handled properly
+  - HTTP request cleanup improved with `http.NoBody`
+- **Type Safety**: Fixed parameter type combinations across AI analyzer methods
+- **Version System**: Improved build version display
+  - Now shows clean release tags (`v0.2.2` instead of `v0.2.2-9-gb6d7645`)
+  - Updated both Unix/Linux/macOS and Windows build scripts
+- **Constants**: Introduced status constants for webhook job states
+  - `StatusPending`, `StatusProcessing`, `StatusCompleted`, `StatusFailed`
+  - Replaced magic strings throughout webhook handlers
+- **Misspellings**: Fixed `cancelled` → `canceled` across codebase
+- **Pre-allocation**: Optimized slice allocations in analysis functions
+
+### Technical Details
+- **Test Results**: All tests passing with zero linting errors
+- **Coverage Integration**: Full code coverage setup complete
+  - New Makefile targets: `coverage`, `coverage-report`, `coverage-strict`
+  - CI/CD pipeline collects coverage across all platforms
+  - Codecov integration configured with 85% project threshold
+- **Build System**: Improved version injection and cross-platform consistency
+
 ## [0.2.2] - 2026-02-03
 
 ### Added
